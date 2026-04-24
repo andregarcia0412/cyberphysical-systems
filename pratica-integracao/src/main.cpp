@@ -5,13 +5,14 @@
 #define RX 16
 #define TX 17
 
-const char *ssid = "Why not?";
-const char *password = "Jgb19091";
+const char *ssid = "iPhone de Rafael";
+const char *password = "Jorfraud06";
 const char *mqttServer = "broker.hivemq.com";
 const int mqttPort = 1883;
 const char *mqttUser = "";
 const char *mqttPassword = "";
 const char *topico = "gilson";
+const char *topicoLed = "koreanled";
 // const char* topico_temp = "cps/m3ef/temp";
 
 WiFiClient espClient;
@@ -58,6 +59,7 @@ void reconectabroker()
     {
       Serial.println("Conectado ao broker!");
       client.subscribe(topico);
+      client.subscribe(topicoLed);
     }
     else
     {
@@ -85,6 +87,11 @@ void callback(char *topic, byte *payload, unsigned int length)
   if (String(topic) == topico)
   {
     Serial.println(messageTemp);
+  }
+
+  if (String(topic) == topicoLed)
+  {
+    Serial2.println(messageTemp);
   }
 }
 
