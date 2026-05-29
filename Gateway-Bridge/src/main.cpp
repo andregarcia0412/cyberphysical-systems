@@ -1,11 +1,12 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <ArduinoJson.h>
 
 #define RX 16
 #define TX 17
 
-const char *ssid = "iPhone de Rafael";
-const char *password = "Jorfraud06";
+const char *ssid = "";
+const char *password = "";
 const char *mqttServer = "broker.hivemq.com";
 const int mqttPort = 1883;
 const char *mqttUser = "";
@@ -48,11 +49,19 @@ void loop()
 
     String temp = message.substring(0, separator);
     String hum = message.substring(separator + 1);
-    Serial.print("Temperatura: ");
-    Serial.println(temp);
 
-    Serial.print("Umidade: ");
-    Serial.println(hum);
+    JsonDocument doc;
+
+    doc["temp"] = temp.toFloat();
+    doc["hum"] = hum.toFloat();
+
+    char jsonBuffer[200];
+
+    serializeJson(doc, jsonBuffer);
+
+    client.publish(topico, jsonBuffer);
+
+    Serial.println(jsonBuffer);
   }
 
   if (!client.connected())
