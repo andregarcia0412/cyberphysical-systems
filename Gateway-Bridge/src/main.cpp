@@ -41,6 +41,13 @@ void setup()
 
 void loop()
 {
+  if (!client.connected())
+  {
+    reconectabroker();
+  }
+
+  client.loop();
+
   if (Serial2.available())
   {
     String message = Serial2.readStringUntil('\n');
@@ -64,12 +71,6 @@ void loop()
     Serial.println(jsonBuffer);
   }
 
-  if (!client.connected())
-  {
-    reconectabroker();
-  }
-  client.loop();
-
   delay(20);
 }
 
@@ -79,10 +80,21 @@ void reconectabroker()
   while (!client.connected())
   {
     Serial.println("Conectando ao broker MQTT...");
-    if (client.connect("", mqttUser, mqttPassword))
+    if (client.connect(
+            "esp32-gateway",
+            mqttUser,
+            mqttPassword,
+            "cps/equipe1/status",
+            1,
+            true,
+            "offline"))
     {
       Serial.println("Conectado ao broker!");
       client.subscribe(topico);
+      client.publish(
+          "cps/equipe1/status",
+          "online",
+          true);
     }
     else
     {
