@@ -6,11 +6,11 @@
 #include <esp_now.h>
 
 #define DHTPIN 22
-#define DHTTYPE DHT22
+#define DHTTYPE DHT11
 
 DHT dht(DHTPIN, DHTTYPE);
 
-uint8_t broadcastAddress[] = {0xEC, 0x62, 0x60, 0x9B, 0x1A, 0x3C};
+uint8_t broadcastAddress[] = {0x5C, 0x01, 0x3B, 0x73, 0x6C, 0x18};
 
 struct DHTData
 {
